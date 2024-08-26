@@ -31,3 +31,7 @@ func (s *MessageService) GetAllMessages() ([]Message, error) {
 func (s *MessageService) UpdateMessageById(message Message) (Message, error) {
 	return s.repo.UpdateMessageById(message)
 }
+
+func (s *MessageService) DeleteMessageById(message Message) error {
+	return s.repo.DeleteMessageById(message)
+}

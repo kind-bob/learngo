@@ -7,8 +7,7 @@ type MessageRepository interface {
 	// GetAllMessages - Возвращаем массив из всех писем в БД и ошибку
 	GetAllMessages() ([]Message, error)
 	UpdateMessageById(message Message) (Message, error)
-	// и ошибку
-
+	DeleteMessageById(message Message) error
 }
 
 func (r *messageRepository) CreateMessage(message Message) (Message, error) {
@@ -31,4 +30,12 @@ func (r *messageRepository) UpdateMessageById(message Message) (Message, error) 
 		return Message{}, result.Error
 	}
 	return message, nil
+}
+
+func (r *messageRepository) DeleteMessageById(message Message) error {
+	result := r.db.Model(&Message{}).Where("ID = ?", message.ID).Delete(message)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
 }

@@ -64,3 +64,19 @@ func (h *Handler) PatchMessagesHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(UpdatedMessage)
 }
+
+func (h *Handler) DeleteMessageHandler(w http.ResponseWriter, r *http.Request) {
+	var deleteString messagesService.Message
+	err := json.NewDecoder(r.Body).Decode(&deleteString)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	errr := h.Service.DeleteMessageById(deleteString)
+	if errr != nil {
+		http.Error(w, errr.Error(), http.StatusInternalServerError)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(errr)
+}
